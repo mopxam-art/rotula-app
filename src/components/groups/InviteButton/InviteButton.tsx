@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useState, useEffect, useRef, useSyncExternalStore } from "react";
 import type { Group } from "@/types/group";
 import { groupsService } from "@/services/api/groups";
 import { buildInviteUrl, buildWhatsAppShareUrl } from "@/utils/invite";
@@ -45,11 +45,25 @@ export function InviteButton({ group }: InviteButtonProps) {
   const [url, setUrl] = useState("");
   const [copied, setCopied] = useState(false);
   const canNativeShare = useCanNativeShare();
+  const copyTimeoutRef = useRef<number | null>(null);
+
+  // Clean up any pending copied-state timer on unmount (#234).
+  useEffect(() => {
+    return () => {
+      if (copyTimeoutRef.current !== null) {
+        window.clearTimeout(copyTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const shareText = `Join my Kolo savings group "${group.name}" 💰`;
 
   async function handleGenerate() {
     setStatus("generating");
+    if (copyTimeoutRef.current !== null) {
+      window.clearTimeout(copyTimeoutRef.current);
+      copyTimeoutRef.current = null;
+    }
     setCopied(false);
     try {
       const invite = await groupsService.createInvite(group.id);
@@ -75,7 +89,13 @@ export function InviteButton({ group }: InviteButtonProps) {
     try {
       await navigator.clipboard.writeText(url);
       setCopied(true);
-      window.setTimeout(() => setCopied(false), 2000);
+      if (copyTimeoutRef.current !== null) {
+        window.clearTimeout(copyTimeoutRef.current);
+      }
+      copyTimeoutRef.current = window.setTimeout(() => {
+        setCopied(false);
+        copyTimeoutRef.current = null;
+      }, 2000);
     } catch {
       /* clipboard blocked — the link is still visible for manual copy */
     }
