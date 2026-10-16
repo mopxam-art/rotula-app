@@ -2,6 +2,7 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Header } from "@/components/layout/Header/Header";
+import { APP_NAME } from "@/utils/constants/brand";
 
 const mockBack = vi.fn();
 const mockPush = vi.fn();
@@ -30,6 +31,13 @@ describe("Header - Profile Navigation & Keyboard Accessibility (5D Matrix)", () 
   // DIMENSION 1: Core Contract, Boundary & URL Target Assertions
   // =========================================================================
   describe("Dimension 1: Core Navigation Contracts and Link Targets", () => {
+    it("renders the canonical product brand name from APP_NAME", () => {
+      render(<Header />);
+      const heading = screen.getByRole("heading", { level: 1 });
+      expect(heading).toHaveTextContent(APP_NAME);
+      expect(heading).toHaveTextContent("Kolo");
+      expect(heading).toHaveClass("text-xl", "font-bold", "text-gray-900");
+    });
     it("renders the profile link with href pointing directly to /profile", () => {
       render(<Header />);
       const profileLink = screen.getByRole("link", { name: /profile/i });
@@ -290,7 +298,7 @@ describe("Header - Profile Navigation & Keyboard Accessibility (5D Matrix)", () 
 
     it("clicking title text does not trigger router.back()", () => {
       render(<Header />);
-      const title = screen.getByText("Rotula");
+      const title = screen.getByText(APP_NAME);
       fireEvent.click(title);
       expect(mockBack).not.toHaveBeenCalled();
     });

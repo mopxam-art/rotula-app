@@ -4,6 +4,7 @@ import React from "react";
 import { ArrowLeft, Bell, Wallet } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { APP_NAME } from "@/utils/constants/brand";
 
 export const Header = () => {
   const router = useRouter();
@@ -18,7 +19,7 @@ export const Header = () => {
         >
           <ArrowLeft size={20} />
         </button>
-        <h1 className="text-xl font-bold text-gray-900">Rotula</h1>
+        <h1 className="text-xl font-bold text-gray-900">{APP_NAME}</h1>
       </div>
       <div className="flex items-center space-x-6">
         <Link
