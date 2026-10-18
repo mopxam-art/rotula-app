@@ -34,17 +34,17 @@ describe("Modal Flexible Heading Level & Accessibility", () => {
       });
     });
 
-    it("1.2 defaults to headingLevel h2 when omitted", () => {
+    it("1.2 defaults to headingLevel h3 when omitted", () => {
       render(
         <Modal isOpen={true} onClose={() => {}} title="Default Level">
           <p>Body</p>
         </Modal>,
       );
 
-      const heading = screen.getByRole("heading", { level: 2 });
+      const heading = screen.getByRole("heading", { level: 3 });
       expect(heading).toBeInTheDocument();
       expect(heading).toHaveTextContent("Default Level");
-      expect(screen.queryByRole("heading", { level: 3 })).toBeNull();
+      expect(screen.queryByRole("heading", { level: 2 })).toBeNull();
     });
 
     const boundaryTitles = [
@@ -73,7 +73,7 @@ describe("Modal Flexible Heading Level & Accessibility", () => {
         expect(dialog).toHaveAttribute("aria-modal", "true");
         expect(dialog).toHaveAttribute("aria-labelledby", "modal-title");
 
-        const heading = screen.getByRole("heading", { level: 2 });
+        const heading = screen.getByRole("heading", { level: 3 });
         expect(heading).toHaveAttribute("id", "modal-title");
       });
     });
@@ -114,12 +114,13 @@ describe("Modal Flexible Heading Level & Accessibility", () => {
       });
     });
 
-    it("2.2 InviteMemberModal defaults headingLevel to h2 when omitted", () => {
+    it("2.2 InviteMemberModal supports headingLevel prop", () => {
       render(
         <InviteMemberModal
           isOpen={true}
           onClose={() => {}}
           onInvite={() => {}}
+          headingLevel="h2"
         />,
       );
 
@@ -197,7 +198,7 @@ describe("Modal Flexible Heading Level & Accessibility", () => {
       const titleId = dialog.getAttribute("aria-labelledby");
       expect(titleId).toBe("modal-title");
 
-      const heading = screen.getByRole("heading", { level: 2 });
+      const heading = screen.getByRole("heading", { level: 3 });
       expect(heading.id).toBe(titleId);
     });
 

@@ -16,7 +16,7 @@ export const Modal: React.FC<ModalProps> = ({
   onClose,
   title,
   children,
-  headingLevel = "h2",
+  headingLevel = "h3",
 }) => {
   if (!isOpen) return null;
 

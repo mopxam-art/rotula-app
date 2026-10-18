@@ -76,12 +76,21 @@ export const InviteMemberModal: React.FC<InviteMemberModalProps> = ({
           {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
         </div>
 
-        <button
-          type="submit"
-          className="w-full bg-[#107569] hover:bg-[#0e6258] text-white font-semibold py-3 rounded-xl transition-colors shadow-sm"
-        >
-          Send Invite
-        </button>
+        <div className="flex justify-end gap-3 mt-6">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-5 py-2.5 rounded-xl font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="px-5 py-2.5 rounded-xl font-medium text-white bg-[#047857] hover:bg-[#065f46] transition-colors"
+          >
+            Send Invite
+          </button>
+        </div>
       </form>
     </Modal>
   );
