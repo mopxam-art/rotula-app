@@ -8,7 +8,11 @@ import { TransactionVolumeChart } from "@/components/admin/charts/TransactionVol
 import { UserGrowthChart } from "@/components/admin/charts/UserGrowthChart";
 import { GroupStatusChart } from "@/components/admin/charts/GroupStatusChart";
 import { SectionCard } from "@/components/admin/ui/SectionCard";
-import type { TimeSeriesPoint, GroupStatusDatum, GroupStatus } from "@/types/admin";
+import type {
+  TimeSeriesPoint,
+  GroupStatusDatum,
+  GroupStatus,
+} from "@/types/admin";
 
 afterEach(() => {
   cleanup();
@@ -61,22 +65,32 @@ describe("Admin Charts Empty State (5D Matrix)", () => {
     });
 
     it("1.5 SavingsGrowthChart handles null gracefully", () => {
-      render(<SavingsGrowthChart data={null as unknown as TimeSeriesPoint[]} />);
+      render(
+        <SavingsGrowthChart data={null as unknown as TimeSeriesPoint[]} />,
+      );
       expect(screen.getByRole("status")).toHaveTextContent("No data available");
     });
 
     it("1.6 SavingsGrowthChart handles undefined gracefully", () => {
-      render(<SavingsGrowthChart data={undefined as unknown as TimeSeriesPoint[]} />);
+      render(
+        <SavingsGrowthChart data={undefined as unknown as TimeSeriesPoint[]} />,
+      );
       expect(screen.getByRole("status")).toHaveTextContent("No data available");
     });
 
     it("1.7 TransactionVolumeChart handles null gracefully", () => {
-      render(<TransactionVolumeChart data={null as unknown as TimeSeriesPoint[]} />);
+      render(
+        <TransactionVolumeChart data={null as unknown as TimeSeriesPoint[]} />,
+      );
       expect(screen.getByRole("status")).toHaveTextContent("No data available");
     });
 
     it("1.8 TransactionVolumeChart handles undefined gracefully", () => {
-      render(<TransactionVolumeChart data={undefined as unknown as TimeSeriesPoint[]} />);
+      render(
+        <TransactionVolumeChart
+          data={undefined as unknown as TimeSeriesPoint[]}
+        />,
+      );
       expect(screen.getByRole("status")).toHaveTextContent("No data available");
     });
 
@@ -86,7 +100,9 @@ describe("Admin Charts Empty State (5D Matrix)", () => {
     });
 
     it("1.10 UserGrowthChart handles undefined gracefully", () => {
-      render(<UserGrowthChart data={undefined as unknown as TimeSeriesPoint[]} />);
+      render(
+        <UserGrowthChart data={undefined as unknown as TimeSeriesPoint[]} />,
+      );
       expect(screen.getByRole("status")).toHaveTextContent("No data available");
     });
 
@@ -96,35 +112,46 @@ describe("Admin Charts Empty State (5D Matrix)", () => {
     });
 
     it("1.12 GroupStatusChart handles undefined gracefully", () => {
-      render(<GroupStatusChart data={undefined as unknown as GroupStatusDatum[]} />);
+      render(
+        <GroupStatusChart data={undefined as unknown as GroupStatusDatum[]} />,
+      );
       expect(screen.getByRole("status")).toHaveTextContent("No data available");
     });
 
     const datasetSizes = [1, 2, 5, 10, 25, 50];
     datasetSizes.forEach((size, idx) => {
       it(`1.13.${idx + 1} SavingsGrowthChart with ${size} data points renders chart and no empty state`, () => {
-        const data: TimeSeriesPoint[] = Array.from({ length: size }, (_, i) => ({
-          label: `M${i + 1}`,
-          value: (i + 1) * 100,
-        }));
+        const data: TimeSeriesPoint[] = Array.from(
+          { length: size },
+          (_, i) => ({
+            label: `M${i + 1}`,
+            value: (i + 1) * 100,
+          }),
+        );
         render(<SavingsGrowthChart data={data} />);
         expect(screen.queryByRole("status")).toBeNull();
       });
 
       it(`1.14.${idx + 1} TransactionVolumeChart with ${size} data points renders chart and no empty state`, () => {
-        const data: TimeSeriesPoint[] = Array.from({ length: size }, (_, i) => ({
-          label: `M${i + 1}`,
-          value: (i + 1) * 50,
-        }));
+        const data: TimeSeriesPoint[] = Array.from(
+          { length: size },
+          (_, i) => ({
+            label: `M${i + 1}`,
+            value: (i + 1) * 50,
+          }),
+        );
         render(<TransactionVolumeChart data={data} />);
         expect(screen.queryByRole("status")).toBeNull();
       });
 
       it(`1.15.${idx + 1} UserGrowthChart with ${size} data points renders chart and no empty state`, () => {
-        const data: TimeSeriesPoint[] = Array.from({ length: size }, (_, i) => ({
-          label: `M${i + 1}`,
-          value: (i + 1) * 10,
-        }));
+        const data: TimeSeriesPoint[] = Array.from(
+          { length: size },
+          (_, i) => ({
+            label: `M${i + 1}`,
+            value: (i + 1) * 10,
+          }),
+        );
         render(<UserGrowthChart data={data} />);
         expect(screen.queryByRole("status")).toBeNull();
       });
@@ -151,7 +178,11 @@ describe("Admin Charts Empty State (5D Matrix)", () => {
     });
 
     it("1.20 TimeSeriesPoint with very large numerical value does not trigger empty state", () => {
-      render(<SavingsGrowthChart data={[{ label: "Max", value: Number.MAX_SAFE_INTEGER }]} />);
+      render(
+        <SavingsGrowthChart
+          data={[{ label: "Max", value: Number.MAX_SAFE_INTEGER }]}
+        />,
+      );
       expect(screen.queryByRole("status")).toBeNull();
     });
   });
@@ -211,7 +242,12 @@ describe("Admin Charts Empty State (5D Matrix)", () => {
       });
     });
 
-    const groupStatuses: GroupStatus[] = ["active", "forming", "completed", "paused"];
+    const groupStatuses: GroupStatus[] = [
+      "active",
+      "forming",
+      "completed",
+      "paused",
+    ];
     groupStatuses.forEach((status, idx) => {
       it(`2.3.${idx + 1} GroupStatusChart handles individual status "${status}" with non-zero count`, () => {
         render(<GroupStatusChart data={[{ status, count: 5 }]} />);
@@ -289,9 +325,11 @@ describe("Admin Charts Empty State (5D Matrix)", () => {
       render(
         <SectionCard title="Savings Trend" description="All-time accumulation">
           <SavingsGrowthChart data={[]} />
-        </SectionCard>
+        </SectionCard>,
       );
-      expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent("Savings Trend");
+      expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent(
+        "Savings Trend",
+      );
       expect(screen.getByText("All-time accumulation")).toBeInTheDocument();
       expect(screen.getByRole("status")).toHaveTextContent("No data available");
     });
@@ -300,9 +338,11 @@ describe("Admin Charts Empty State (5D Matrix)", () => {
       render(
         <SectionCard title="Transaction Volume">
           <TransactionVolumeChart data={[]} />
-        </SectionCard>
+        </SectionCard>,
       );
-      expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent("Transaction Volume");
+      expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent(
+        "Transaction Volume",
+      );
       expect(screen.getByRole("status")).toHaveTextContent("No data available");
     });
 
@@ -310,9 +350,11 @@ describe("Admin Charts Empty State (5D Matrix)", () => {
       render(
         <SectionCard title="User Onboarding">
           <UserGrowthChart data={[]} />
-        </SectionCard>
+        </SectionCard>,
       );
-      expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent("User Onboarding");
+      expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent(
+        "User Onboarding",
+      );
       expect(screen.getByRole("status")).toHaveTextContent("No data available");
     });
 
@@ -320,9 +362,11 @@ describe("Admin Charts Empty State (5D Matrix)", () => {
       render(
         <SectionCard title="Status Breakdown">
           <GroupStatusChart data={[]} />
-        </SectionCard>
+        </SectionCard>,
       );
-      expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent("Status Breakdown");
+      expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent(
+        "Status Breakdown",
+      );
       expect(screen.getByRole("status")).toHaveTextContent("No data available");
     });
 
@@ -333,7 +377,7 @@ describe("Admin Charts Empty State (5D Matrix)", () => {
           <TransactionVolumeChart data={[]} />
           <UserGrowthChart data={[]} />
           <GroupStatusChart data={[]} />
-        </div>
+        </div>,
       );
       const statuses = screen.getAllByRole("status");
       expect(statuses).toHaveLength(4);
@@ -349,25 +393,33 @@ describe("Admin Charts Empty State (5D Matrix)", () => {
   describe("Dimension 4: Negative Controls & Isolation", () => {
     it("4.1 Empty SavingsGrowthChart does not render Recharts responsive container", () => {
       const { container } = render(<SavingsGrowthChart data={[]} />);
-      expect(container.querySelector(".recharts-responsive-container")).toBeNull();
+      expect(
+        container.querySelector(".recharts-responsive-container"),
+      ).toBeNull();
       expect(container.querySelector("svg")).toBeNull();
     });
 
     it("4.2 Empty TransactionVolumeChart does not render Recharts responsive container", () => {
       const { container } = render(<TransactionVolumeChart data={[]} />);
-      expect(container.querySelector(".recharts-responsive-container")).toBeNull();
+      expect(
+        container.querySelector(".recharts-responsive-container"),
+      ).toBeNull();
       expect(container.querySelector("svg")).toBeNull();
     });
 
     it("4.3 Empty UserGrowthChart does not render Recharts responsive container", () => {
       const { container } = render(<UserGrowthChart data={[]} />);
-      expect(container.querySelector(".recharts-responsive-container")).toBeNull();
+      expect(
+        container.querySelector(".recharts-responsive-container"),
+      ).toBeNull();
       expect(container.querySelector("svg")).toBeNull();
     });
 
     it("4.4 Empty GroupStatusChart does not render Recharts responsive container", () => {
       const { container } = render(<GroupStatusChart data={[]} />);
-      expect(container.querySelector(".recharts-responsive-container")).toBeNull();
+      expect(
+        container.querySelector(".recharts-responsive-container"),
+      ).toBeNull();
       expect(container.querySelector("svg")).toBeNull();
     });
 
@@ -400,7 +452,7 @@ describe("Admin Charts Empty State (5D Matrix)", () => {
         <div>
           <SavingsGrowthChart data={[]} />
           <TransactionVolumeChart data={sampleTimeSeries} />
-        </div>
+        </div>,
       );
       const statuses = screen.getAllByRole("status");
       expect(statuses).toHaveLength(1);
@@ -488,7 +540,7 @@ describe("Admin Charts Empty State (5D Matrix)", () => {
           <TransactionVolumeChart data={[]} />
           <UserGrowthChart data={[]} />
           <GroupStatusChart data={[]} />
-        </div>
+        </div>,
       );
       expect(screen.getAllByRole("status")).toHaveLength(4);
       unmount();
