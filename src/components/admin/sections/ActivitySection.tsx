@@ -22,10 +22,7 @@ export function ActivitySection({
       description="Recent administrative and system events"
     >
       {activity.length === 0 ? (
-        <p
-          role="status"
-          className="py-8 text-center text-sm text-slate-500"
-        >
+        <p role="status" className="py-8 text-center text-sm text-slate-500">
           No activity recorded yet.
         </p>
       ) : (

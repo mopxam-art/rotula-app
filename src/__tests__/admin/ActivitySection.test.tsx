@@ -3,7 +3,9 @@ import { describe, it, expect, afterEach } from "vitest";
 import { ActivitySection } from "@/components/admin/sections/ActivitySection";
 import type { ActivityLogEntry, ActivitySeverity } from "@/types/admin";
 
-function createEntry(overrides: Partial<ActivityLogEntry> = {}): ActivityLogEntry {
+function createEntry(
+  overrides: Partial<ActivityLogEntry> = {},
+): ActivityLogEntry {
   return {
     id: `act-${Math.random().toString(36).substring(2, 9)}`,
     actor: "Admin User",
@@ -44,11 +46,17 @@ describe("ActivitySection - 5D Comprehensive Matrix", () => {
       render(<ActivitySection activity={[]} />);
 
       expect(screen.getByText("Activity Log")).toBeInTheDocument();
-      expect(screen.getByText("Recent administrative and system events")).toBeInTheDocument();
+      expect(
+        screen.getByText("Recent administrative and system events"),
+      ).toBeInTheDocument();
     });
 
     it("renders single element list when activity length is 1", () => {
-      const entry = createEntry({ actor: "Alice", action: "created group", target: "G_10" });
+      const entry = createEntry({
+        actor: "Alice",
+        action: "created group",
+        target: "G_10",
+      });
       const { container } = render(<ActivitySection activity={[entry]} />);
 
       expect(screen.queryByRole("status")).not.toBeInTheDocument();
@@ -61,15 +69,17 @@ describe("ActivitySection - 5D Comprehensive Matrix", () => {
     });
 
     const counts = [
-      2, 3, 4, 5, 6, 7, 8, 9, 10,
-      11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-      21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
-      35, 40, 45, 50, 60, 70, 80
+      2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+      22, 23, 24, 25, 26, 27, 28, 29, 30, 35, 40, 45, 50, 60, 70, 80,
     ];
     counts.forEach((n) => {
       it(`renders correctly with exactly ${n} activity entries`, () => {
         const entries = Array.from({ length: n }, (_, i) =>
-          createEntry({ id: `item-${i}`, actor: `Actor ${i}`, target: `T_${i}` })
+          createEntry({
+            id: `item-${i}`,
+            actor: `Actor ${i}`,
+            target: `T_${i}`,
+          }),
         );
         render(<ActivitySection activity={entries} />);
 
@@ -124,14 +134,22 @@ describe("ActivitySection - 5D Comprehensive Matrix", () => {
     });
 
     it("handles empty actor and empty target strings gracefully", () => {
-      const entry = createEntry({ actor: "", action: "noop action", target: "" });
+      const entry = createEntry({
+        actor: "",
+        action: "noop action",
+        target: "",
+      });
       render(<ActivitySection activity={[entry]} />);
 
       expect(screen.getByText(/noop action/)).toBeInTheDocument();
     });
 
     it("handles whitespace-only text fields safely", () => {
-      const entry = createEntry({ actor: "   ", action: "   trimmed action   ", target: "   " });
+      const entry = createEntry({
+        actor: "   ",
+        action: "   trimmed action   ",
+        target: "   ",
+      });
       render(<ActivitySection activity={[entry]} />);
 
       expect(screen.getByText(/trimmed action/)).toBeInTheDocument();
@@ -150,7 +168,11 @@ describe("ActivitySection - 5D Comprehensive Matrix", () => {
         const { container } = render(<ActivitySection activity={[entry]} />);
 
         const expectedDotClass =
-          sev === "info" ? "bg-sky-500" : sev === "warning" ? "bg-amber-500" : "bg-rose-500";
+          sev === "info"
+            ? "bg-sky-500"
+            : sev === "warning"
+              ? "bg-amber-500"
+              : "bg-rose-500";
         const dot = container.querySelector(`.${expectedDotClass}`);
         expect(dot).toBeInTheDocument();
         expect(dot).toHaveAttribute("aria-hidden");
@@ -167,17 +189,35 @@ describe("ActivitySection - 5D Comprehensive Matrix", () => {
           ];
           const { container } = render(<ActivitySection activity={entries} />);
 
-          const c1 = s1 === "info" ? "bg-sky-500" : s1 === "warning" ? "bg-amber-500" : "bg-rose-500";
-          const c2 = s2 === "info" ? "bg-sky-500" : s2 === "warning" ? "bg-amber-500" : "bg-rose-500";
+          const c1 =
+            s1 === "info"
+              ? "bg-sky-500"
+              : s1 === "warning"
+                ? "bg-amber-500"
+                : "bg-rose-500";
+          const c2 =
+            s2 === "info"
+              ? "bg-sky-500"
+              : s2 === "warning"
+                ? "bg-amber-500"
+                : "bg-rose-500";
 
-          expect(container.querySelectorAll(`.${c1}`).length).toBeGreaterThanOrEqual(1);
-          expect(container.querySelectorAll(`.${c2}`).length).toBeGreaterThanOrEqual(1);
+          expect(
+            container.querySelectorAll(`.${c1}`).length,
+          ).toBeGreaterThanOrEqual(1);
+          expect(
+            container.querySelectorAll(`.${c2}`).length,
+          ).toBeGreaterThanOrEqual(1);
         });
       });
     });
 
     // Triple combinations: 3^3 = 27 tests (sample 10)
-    const tripleCombos: [ActivitySeverity, ActivitySeverity, ActivitySeverity][] = [
+    const tripleCombos: [
+      ActivitySeverity,
+      ActivitySeverity,
+      ActivitySeverity,
+    ][] = [
       ["info", "warning", "critical"],
       ["critical", "critical", "critical"],
       ["warning", "info", "warning"],
@@ -202,7 +242,11 @@ describe("ActivitySection - 5D Comprehensive Matrix", () => {
 
     it("renders very long actor, action, and target strings with text wrapping", () => {
       const longText = "VeryLongTextStringWithoutSpacesRepeated".repeat(10);
-      const entry = createEntry({ actor: longText, action: longText, target: longText });
+      const entry = createEntry({
+        actor: longText,
+        action: longText,
+        target: longText,
+      });
       render(<ActivitySection activity={[entry]} />);
 
       expect(screen.getAllByRole("listitem")).toHaveLength(1);
@@ -283,7 +327,10 @@ describe("ActivitySection - 5D Comprehensive Matrix", () => {
   // =========================================================================
   describe("Dimension 4: Negative Controls & Isolation", () => {
     it("does not mutate incoming activity array prop", () => {
-      const original = [createEntry({ id: "fixed-1" }), createEntry({ id: "fixed-2" })];
+      const original = [
+        createEntry({ id: "fixed-1" }),
+        createEntry({ id: "fixed-2" }),
+      ];
       const copy = [...original];
 
       render(<ActivitySection activity={original} />);
@@ -294,7 +341,11 @@ describe("ActivitySection - 5D Comprehensive Matrix", () => {
 
     it("does not render duplicate keys or crash when rendering identical entries with unique ids", () => {
       const entries = Array.from({ length: 5 }, (_, idx) =>
-        createEntry({ id: `unique-${idx}`, actor: "SameActor", action: "same action" })
+        createEntry({
+          id: `unique-${idx}`,
+          actor: "SameActor",
+          action: "same action",
+        }),
       );
       render(<ActivitySection activity={entries} />);
 
@@ -317,7 +368,9 @@ describe("ActivitySection - 5D Comprehensive Matrix", () => {
     });
 
     it("renders rail border-l on list when populated", () => {
-      const { container } = render(<ActivitySection activity={[createEntry()]} />);
+      const { container } = render(
+        <ActivitySection activity={[createEntry()]} />,
+      );
       const ol = container.querySelector("ol");
       expect(ol?.className).toContain("border-l");
     });
@@ -375,8 +428,10 @@ describe("ActivitySection - 5D Comprehensive Matrix", () => {
           actor: `User-${i}`,
           action: `action-${i}`,
           target: `TARGET-${i}`,
-          severity: (["info", "warning", "critical"] as ActivitySeverity[])[i % 3],
-        })
+          severity: (["info", "warning", "critical"] as ActivitySeverity[])[
+            i % 3
+          ],
+        }),
       );
 
       const t0 = performance.now();
