@@ -31,10 +31,19 @@ export default function GroupDetails() {
         if (mounted) setIsLoading(false);
         return;
       }
-      const fetched = await groupsService.getGroup(params.id);
-      if (mounted) {
-        setGroup(fetched);
-        setIsLoading(false);
+      try {
+        const fetched = await groupsService.getGroup(params.id);
+        if (mounted) {
+          setGroup(fetched);
+        }
+      } catch {
+        if (mounted) {
+          setGroup(null);
+        }
+      } finally {
+        if (mounted) {
+          setIsLoading(false);
+        }
       }
     };
     fetchGroup();
@@ -116,10 +125,22 @@ export default function GroupDetails() {
   if (!group) {
     return (
       <div className="max-w-6xl mx-auto p-4 md:p-8 bg-[#f4f7f5] min-h-screen flex justify-center items-center">
-        <div className="text-center">
-          <p className="text-gray-500 mb-4">Group not found or unavailable.</p>
-          <Link href="/groups" className="text-green-700 underline">
-            Back to groups
+        <div className="w-full max-w-md bg-white rounded-xl shadow-sm p-6 md:p-8 text-center border border-gray-100">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 mb-4 font-bold text-xl">
+            !
+          </div>
+          <h1 className="font-display text-xl font-bold text-slate-900 mb-2">
+            Group not found
+          </h1>
+          <p className="text-sm text-slate-500 mb-6">
+            The group you are looking for does not exist or is unavailable.
+            Return to the groups index to browse your active groups.
+          </p>
+          <Link
+            href="/groups"
+            className="inline-block rounded-lg bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+          >
+            Back to groups index
           </Link>
         </div>
       </div>
