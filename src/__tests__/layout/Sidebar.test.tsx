@@ -133,20 +133,34 @@ describe("Sidebar Accessibility & Keyboard Reachability (5D Matrix)", () => {
     [1, 2, 3, 4, 10].forEach((toggleCount, idx) => {
       it(`1.9.${idx + 1} handles rapid toggle cycle count = ${toggleCount}`, () => {
         render(<Sidebar isMobile={true} />);
-        const toggle = screen.getByRole("button", { name: "Toggle navigation" });
+        const toggle = screen.getByRole("button", {
+          name: "Toggle navigation",
+        });
         for (let i = 0; i < toggleCount; i++) {
           fireEvent.click(toggle);
         }
         const expectedOpen = toggleCount % 2 === 1;
-        expect(toggle).toHaveAttribute("aria-expanded", expectedOpen ? "true" : "false");
+        expect(toggle).toHaveAttribute(
+          "aria-expanded",
+          expectedOpen ? "true" : "false",
+        );
       });
     });
 
-    const linkNames = ["Home", "Savings", "Groups", "Payments", "Settings", "Start New Goal"];
+    const linkNames = [
+      "Home",
+      "Savings",
+      "Groups",
+      "Payments",
+      "Settings",
+      "Start New Goal",
+    ];
     linkNames.forEach((name, idx) => {
       it(`1.10.${idx + 1} clicking navigation link "${name}" closes the mobile drawer`, () => {
         render(<Sidebar isMobile={true} />);
-        const toggle = screen.getByRole("button", { name: "Toggle navigation" });
+        const toggle = screen.getByRole("button", {
+          name: "Toggle navigation",
+        });
         fireEvent.click(toggle);
         expect(toggle).toHaveAttribute("aria-expanded", "true");
 
@@ -212,7 +226,11 @@ describe("Sidebar Accessibility & Keyboard Reachability (5D Matrix)", () => {
       const toggle = screen.getByRole("button", { name: "Toggle navigation" });
       fireEvent.click(toggle);
 
-      fireEvent.keyDown(window, { key: "Escape", shiftKey: true, altKey: true });
+      fireEvent.keyDown(window, {
+        key: "Escape",
+        shiftKey: true,
+        altKey: true,
+      });
       expect(toggle).toHaveAttribute("aria-expanded", "false");
     });
 
@@ -221,7 +239,11 @@ describe("Sidebar Accessibility & Keyboard Reachability (5D Matrix)", () => {
       const toggle = screen.getByRole("button", { name: "Toggle navigation" });
       fireEvent.click(toggle);
 
-      fireEvent.keyDown(window, { key: "Escape", shiftKey: true, ctrlKey: true });
+      fireEvent.keyDown(window, {
+        key: "Escape",
+        shiftKey: true,
+        ctrlKey: true,
+      });
       expect(toggle).toHaveAttribute("aria-expanded", "false");
     });
 
@@ -250,15 +272,39 @@ describe("Sidebar Accessibility & Keyboard Reachability (5D Matrix)", () => {
     });
 
     const nonEscapeKeys = [
-      "Enter", "Space", "Tab", "ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight",
-      "Home", "End", "PageUp", "PageDown", "a", "z", "0", "9",
-      "F1", "F5", "F12", "Backspace", "Delete", "CapsLock", "Control", "Alt", "Shift", "Meta"
+      "Enter",
+      "Space",
+      "Tab",
+      "ArrowDown",
+      "ArrowUp",
+      "ArrowLeft",
+      "ArrowRight",
+      "Home",
+      "End",
+      "PageUp",
+      "PageDown",
+      "a",
+      "z",
+      "0",
+      "9",
+      "F1",
+      "F5",
+      "F12",
+      "Backspace",
+      "Delete",
+      "CapsLock",
+      "Control",
+      "Alt",
+      "Shift",
+      "Meta",
     ];
 
     nonEscapeKeys.forEach((key, idx) => {
       it(`2.10.${idx + 1} pressing key "${key}" does not close the open drawer`, () => {
         render(<Sidebar isMobile={true} />);
-        const toggle = screen.getByRole("button", { name: "Toggle navigation" });
+        const toggle = screen.getByRole("button", {
+          name: "Toggle navigation",
+        });
         fireEvent.click(toggle);
         expect(toggle).toHaveAttribute("aria-expanded", "true");
 
@@ -311,7 +357,11 @@ describe("Sidebar Accessibility & Keyboard Reachability (5D Matrix)", () => {
       const middle = focusable[2];
       middle.focus();
 
-      const event = new KeyboardEvent("keydown", { key: "Tab", shiftKey: false, cancelable: true });
+      const event = new KeyboardEvent("keydown", {
+        key: "Tab",
+        shiftKey: false,
+        cancelable: true,
+      });
       const prevented = !aside.dispatchEvent(event);
       expect(prevented).toBe(false);
     });
@@ -326,7 +376,11 @@ describe("Sidebar Accessibility & Keyboard Reachability (5D Matrix)", () => {
       const middle = focusable[2];
       middle.focus();
 
-      const event = new KeyboardEvent("keydown", { key: "Tab", shiftKey: true, cancelable: true });
+      const event = new KeyboardEvent("keydown", {
+        key: "Tab",
+        shiftKey: true,
+        cancelable: true,
+      });
       const prevented = !aside.dispatchEvent(event);
       expect(prevented).toBe(false);
     });
@@ -334,7 +388,10 @@ describe("Sidebar Accessibility & Keyboard Reachability (5D Matrix)", () => {
     it("2.15 Tab keydown when drawer is closed on mobile does not trap focus", () => {
       render(<Sidebar isMobile={true} />);
       const aside = screen.getByRole("complementary", { hidden: true });
-      const event = new KeyboardEvent("keydown", { key: "Tab", cancelable: true });
+      const event = new KeyboardEvent("keydown", {
+        key: "Tab",
+        cancelable: true,
+      });
       const prevented = !aside.dispatchEvent(event);
       expect(prevented).toBe(false);
     });
@@ -342,7 +399,10 @@ describe("Sidebar Accessibility & Keyboard Reachability (5D Matrix)", () => {
     it("2.16 Tab keydown on desktop mode does not trap focus", () => {
       render(<Sidebar isMobile={false} />);
       const aside = screen.getByRole("complementary");
-      const event = new KeyboardEvent("keydown", { key: "Tab", cancelable: true });
+      const event = new KeyboardEvent("keydown", {
+        key: "Tab",
+        cancelable: true,
+      });
       const prevented = !aside.dispatchEvent(event);
       expect(prevented).toBe(false);
     });
@@ -379,7 +439,9 @@ describe("Sidebar Accessibility & Keyboard Reachability (5D Matrix)", () => {
       render(<Sidebar isMobile={true} />);
       const toggle = screen.getByRole("button", { name: "Toggle navigation" });
       const aside = screen.getByRole("complementary", { hidden: true });
-      expect(toggle.getAttribute("aria-controls")).toBe(aside.getAttribute("id"));
+      expect(toggle.getAttribute("aria-controls")).toBe(
+        aside.getAttribute("id"),
+      );
     });
 
     it("3.3 Toggle renders Menu icon when closed and X icon when open", () => {
@@ -406,7 +468,9 @@ describe("Sidebar Accessibility & Keyboard Reachability (5D Matrix)", () => {
 
     it("3.5 Mobile dismiss overlay is not rendered when drawer is closed", () => {
       render(<Sidebar isMobile={true} />);
-      expect(screen.queryByRole("button", { name: "Close navigation" })).toBeNull();
+      expect(
+        screen.queryByRole("button", { name: "Close navigation" }),
+      ).toBeNull();
     });
 
     it("3.6 Mobile dismiss overlay is rendered with role button and accessible name when open", () => {
@@ -432,7 +496,9 @@ describe("Sidebar Accessibility & Keyboard Reachability (5D Matrix)", () => {
 
     it("3.8 Dismiss overlay is never rendered on desktop mode even if toggled", () => {
       render(<Sidebar isMobile={false} />);
-      expect(screen.queryByRole("button", { name: "Close navigation" })).toBeNull();
+      expect(
+        screen.queryByRole("button", { name: "Close navigation" }),
+      ).toBeNull();
     });
 
     it("3.9 Aside has accessible id and label", () => {
@@ -459,14 +525,20 @@ describe("Sidebar Accessibility & Keyboard Reachability (5D Matrix)", () => {
       ];
 
       expected.forEach(({ name, href }) => {
-        const link = screen.getByRole("link", { name: new RegExp(name, "i"), hidden: true });
+        const link = screen.getByRole("link", {
+          name: new RegExp(name, "i"),
+          hidden: true,
+        });
         expect(link).toHaveAttribute("href", href);
       });
     });
 
     it("3.12 Renders 'Start New Goal' button with href '/groups'", () => {
       render(<Sidebar isMobile={true} />);
-      const goalLink = screen.getByRole("link", { name: "Start New Goal", hidden: true });
+      const goalLink = screen.getByRole("link", {
+        name: "Start New Goal",
+        hidden: true,
+      });
       expect(goalLink).toHaveAttribute("href", "/groups");
     });
   });
@@ -504,11 +576,19 @@ describe("Sidebar Accessibility & Keyboard Reachability (5D Matrix)", () => {
       expect(toggle).toHaveAttribute("aria-expanded", "false");
     });
 
-    const nonModifyingEvents = ["mousemove", "scroll", "resize", "wheel", "contextmenu"];
+    const nonModifyingEvents = [
+      "mousemove",
+      "scroll",
+      "resize",
+      "wheel",
+      "contextmenu",
+    ];
     nonModifyingEvents.forEach((eventName, idx) => {
       it(`4.4.${idx + 1} firing event "${eventName}" does not close the open drawer`, () => {
         render(<Sidebar isMobile={true} />);
-        const toggle = screen.getByRole("button", { name: "Toggle navigation" });
+        const toggle = screen.getByRole("button", {
+          name: "Toggle navigation",
+        });
         fireEvent.click(toggle);
         expect(toggle).toHaveAttribute("aria-expanded", "true");
 

@@ -1,6 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useSyncExternalStore } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useSyncExternalStore,
+} from "react";
 import {
   Home,
   PiggyBank,
@@ -30,7 +35,7 @@ function useIsMobile() {
       }
       return window.innerWidth < 768;
     },
-    () => false
+    () => false,
   );
 }
 
@@ -75,7 +80,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobile: isMobileProp }) => {
     if (isOpen) {
       wasOpenRef.current = true;
       const firstFocusable = asideRef.current?.querySelector<HTMLElement>(
-        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
       );
       firstFocusable?.focus();
     } else if (wasOpenRef.current) {
@@ -90,7 +95,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobile: isMobileProp }) => {
 
     if (event.key === "Tab") {
       const focusableElements = asideRef.current?.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
       );
       if (!focusableElements || focusableElements.length === 0) return;
 
@@ -124,7 +129,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobile: isMobileProp }) => {
         aria-expanded={isOpen}
         aria-controls="mobile-sidebar"
       >
-        {isOpen ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
+        {isOpen ? (
+          <X size={24} aria-hidden="true" />
+        ) : (
+          <Menu size={24} aria-hidden="true" />
+        )}
       </button>
 
       <aside
