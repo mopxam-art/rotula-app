@@ -35,7 +35,11 @@ export const Header = () => {
           <Bell size={20} />
           <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
         </button>
-        <div className="w-8 h-8 rounded-full bg-blue-100 overflow-hidden border border-gray-200">
+        <Link
+          href="/profile"
+          aria-label="Profile"
+          className="w-8 h-8 rounded-full bg-blue-100 overflow-hidden border border-gray-200 hover:ring-2 hover:ring-green-500 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all flex items-center justify-center shrink-0"
+        >
           <img
             src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
             alt="Your profile"
@@ -45,7 +49,7 @@ export const Header = () => {
             decoding="async"
             className="w-full h-full object-cover"
           />
-        </div>
+        </Link>
       </div>
     </header>
   );

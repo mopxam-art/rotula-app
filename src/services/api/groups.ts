@@ -15,8 +15,8 @@ import { generateInviteCode } from "@/utils/invite";
  * client components.
  */
 
-const INVITES_KEY = "kolo_invites";
-const MEMBERSHIPS_KEY = "kolo_memberships";
+export const INVITES_KEY = "kolo_invites";
+export const MEMBERSHIPS_KEY = "kolo_memberships";
 
 /**
  * Seeded demo groups so the dashboard has something to invite people to.
@@ -67,12 +67,13 @@ function writeMap(key: string, value: Record<string, string>): void {
 export const groupsService = {
   /** TODO: replace with real API — GET /groups */
   async listGroups(): Promise<Group[]> {
-    return SEED_GROUPS;
+    return SEED_GROUPS.map((group) => ({ ...group }));
   },
 
   /** TODO: replace with real API — GET /groups/:id */
   async getGroup(id: string): Promise<Group | null> {
-    return SEED_GROUPS.find((group) => group.id === id) ?? null;
+    const group = SEED_GROUPS.find((seed) => seed.id === id);
+    return group ? { ...group } : null;
   },
 
   /**
@@ -128,5 +129,50 @@ export const groupsService = {
   async hasJoined(groupId: string): Promise<boolean> {
     const memberships = readMap(MEMBERSHIPS_KEY);
     return Boolean(memberships[groupId]);
+  },
+
+  /**
+   * Fetch active savings groups for the dashboard.
+   * TODO: replace with real API — GET /savings-groups
+   */
+  async getSavingsGroups(): Promise<
+    Array<{
+      id: string;
+      name: string;
+      tag: string;
+      saved: number;
+      target: number;
+      nextDate: string;
+      avatars: string[];
+    }>
+  > {
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    return [
+      {
+        id: "1",
+        name: "Home Fund",
+        tag: "FAMILY HOME",
+        saved: 8200,
+        target: 10000,
+        nextDate: "Oct 24",
+        avatars: [
+          "https://i.pravatar.cc/150?u=1",
+          "https://i.pravatar.cc/150?u=2",
+          "+3",
+        ],
+      },
+      {
+        id: "2",
+        name: "Bali Retreat",
+        tag: "TRAVEL",
+        saved: 1450,
+        target: 3222,
+        nextDate: "Nov 02",
+        avatars: [
+          "https://i.pravatar.cc/150?u=3",
+          "https://i.pravatar.cc/150?u=4",
+        ],
+      },
+    ];
   },
 };

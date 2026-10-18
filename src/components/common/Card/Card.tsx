@@ -1,3 +1,0 @@
-export const Card = ({ children }: { children: React.ReactNode }) => (
-  <div>{children}</div>
-);

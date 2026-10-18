@@ -100,19 +100,19 @@ describe("Sidebar Accessibility & Keyboard Reachability (5D Matrix)", () => {
     });
 
     const pathnames = [
-      { path: "/", activeIndex: -1 },
-      { path: "/dashboard", activeIndex: 0 },
-      { path: "/dashboard/metrics", activeIndex: 0 },
-      { path: "/savings", activeIndex: 1 },
-      { path: "/savings/pools", activeIndex: 1 },
-      { path: "/groups", activeIndex: 2 },
-      { path: "/groups/circle-1", activeIndex: 2 },
-      { path: "/payments", activeIndex: 3 },
-      { path: "/profile", activeIndex: 4 },
-      { path: "/unknown-route", activeIndex: -1 },
+      { path: "/", activeIndices: [] as number[] },
+      { path: "/dashboard", activeIndices: [0] },
+      { path: "/dashboard/metrics", activeIndices: [0] },
+      { path: "/savings", activeIndices: [] as number[] },
+      { path: "/savings/pools", activeIndices: [] as number[] },
+      { path: "/groups", activeIndices: [1, 2] },
+      { path: "/groups/circle-1", activeIndices: [1, 2] },
+      { path: "/payments", activeIndices: [3] },
+      { path: "/profile", activeIndices: [4] },
+      { path: "/unknown-route", activeIndices: [] as number[] },
     ];
 
-    pathnames.forEach(({ path, activeIndex }, idx) => {
+    pathnames.forEach(({ path, activeIndices }, idx) => {
       it(`1.8.${idx + 1} correctly highlights active item for pathname "${path}"`, () => {
         currentPathname = path;
         render(<Sidebar isMobile={true} />);
@@ -120,7 +120,7 @@ describe("Sidebar Accessibility & Keyboard Reachability (5D Matrix)", () => {
         const navLinks = Array.from(aside.querySelectorAll("nav a"));
 
         navLinks.forEach((link, linkIdx) => {
-          if (linkIdx === activeIndex) {
+          if (activeIndices.includes(linkIdx)) {
             expect(link.className).toContain("bg-[#5fe3a1]");
             expect(link.className).toContain("font-semibold");
           } else {
@@ -452,7 +452,7 @@ describe("Sidebar Accessibility & Keyboard Reachability (5D Matrix)", () => {
       render(<Sidebar isMobile={true} />);
       const expected = [
         { name: "Home", href: "/dashboard" },
-        { name: "Savings", href: "/savings" },
+        { name: "Savings", href: "/groups" },
         { name: "Groups", href: "/groups" },
         { name: "Payments", href: "/payments" },
         { name: "Settings", href: "/profile" },
@@ -464,10 +464,10 @@ describe("Sidebar Accessibility & Keyboard Reachability (5D Matrix)", () => {
       });
     });
 
-    it("3.12 Renders 'Start New Goal' button with href '/groups/new'", () => {
+    it("3.12 Renders 'Start New Goal' button with href '/groups'", () => {
       render(<Sidebar isMobile={true} />);
       const goalLink = screen.getByRole("link", { name: "Start New Goal", hidden: true });
-      expect(goalLink).toHaveAttribute("href", "/groups/new");
+      expect(goalLink).toHaveAttribute("href", "/groups");
     });
   });
 

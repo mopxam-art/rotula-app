@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "./useAuth";
+import { useAuth } from "@/hooks/useAuth";
+import { groupsService } from "@/services/api/groups";
 
 export interface SavingsGroup {
   id: string;
@@ -24,46 +25,33 @@ export const useGroups = () => {
       return () => clearTimeout(timer);
     }
 
+    let mounted = true;
     const fetchGroups = async () => {
       try {
         setIsLoading(true);
-        await new Promise((resolve) => setTimeout(resolve, 800));
-        setData([
-          {
-            id: "1",
-            name: "Home Fund",
-            tag: "FAMILY HOME",
-            saved: 8200,
-            target: 10000,
-            nextDate: "Oct 24",
-            avatars: [
-              "https://i.pravatar.cc/150?u=1",
-              "https://i.pravatar.cc/150?u=2",
-              "+3",
-            ],
-          },
-          {
-            id: "2",
-            name: "Bali Retreat",
-            tag: "TRAVEL",
-            saved: 1450,
-            target: 3222, // 1450 / 0.45 = ~3222 to get 45%
-            nextDate: "Nov 02",
-            avatars: [
-              "https://i.pravatar.cc/150?u=3",
-              "https://i.pravatar.cc/150?u=4",
-            ],
-          },
-        ]);
+        const groups = await groupsService.getSavingsGroups();
+        if (mounted) {
+          setData(groups);
+          setError(null);
+        }
       } catch (err) {
-        setError(
-          err instanceof Error ? err : new Error("Failed to fetch groups data"),
-        );
+        if (mounted) {
+          setError(
+            err instanceof Error
+              ? err
+              : new Error("Failed to fetch groups data"),
+          );
+        }
       } finally {
-        setIsLoading(false);
+        if (mounted) {
+          setIsLoading(false);
+        }
       }
     };
     fetchGroups();
+    return () => {
+      mounted = false;
+    };
   }, [user]);
 
   return { data, isLoading, error };

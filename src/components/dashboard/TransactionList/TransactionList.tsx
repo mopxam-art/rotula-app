@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ArrowDown, ArrowUp, Users } from "lucide-react";
+import { ArrowDown, ArrowUp, Receipt, Users } from "lucide-react";
 import type { Transaction } from "@/hooks/usePayments";
 
 interface TransactionListProps {
@@ -39,6 +39,33 @@ export function TransactionList({
           <div className="p-4 border-t border-gray-50 flex justify-center">
             <div className="h-4 w-32 bg-gray-200 rounded"></div>
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (transactions.length === 0) {
+    return (
+      <div className="w-full">
+        <h3 className="text-xl font-semibold text-gray-900 mb-4">
+          Recent Activity
+        </h3>
+
+        <div
+          className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col items-center text-center"
+          role="status"
+          aria-live="polite"
+        >
+          <div className="w-14 h-14 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center mb-4">
+            <Receipt className="w-7 h-7 text-gray-400" aria-hidden="true" />
+          </div>
+          <p className="font-medium text-gray-900 text-sm mb-1">
+            No activity yet
+          </p>
+          <p className="text-xs font-medium text-gray-500 max-w-xs">
+            Your deposits, contributions, and transfers will appear here once
+            you make your first transaction.
+          </p>
         </div>
       </div>
     );

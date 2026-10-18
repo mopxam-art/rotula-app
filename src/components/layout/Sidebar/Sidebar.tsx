@@ -50,7 +50,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobile: isMobileProp }) => {
 
   const navItems = [
     { name: "Home", icon: Home, href: "/dashboard" },
-    { name: "Savings", icon: PiggyBank, href: "/savings" },
+    { name: "Savings", icon: PiggyBank, href: "/groups" },
     { name: "Groups", icon: Users, href: "/groups" },
     { name: "Payments", icon: CreditCard, href: "/payments" },
     { name: "Settings", icon: Settings, href: "/profile" },
@@ -169,7 +169,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobile: isMobileProp }) => {
         </div>
         <div className="mt-auto p-6">
           <Link
-            href="/groups/new"
+            href="/groups"
             tabIndex={isClosedOnMobile ? -1 : undefined}
             className="block text-center w-full bg-[#047857] hover:bg-[#065f46] text-white py-3 rounded-xl font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#047857] focus:ring-offset-2"
             onClick={() => setIsOpen(false)}

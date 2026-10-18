@@ -9,7 +9,7 @@ export const HelpCard: React.FC = () => {
         Chat with your group assistant on WhatsApp
       </p>
       <button className="flex items-center text-sm font-semibold text-green-700 hover:text-green-800 transition-colors">
-        <MessageCircle size={16} className="mr-2" />
+        <MessageCircle size={16} className="mr-2" aria-hidden="true" />
         Open WhatsApp
       </button>
     </div>

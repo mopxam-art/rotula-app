@@ -1,7 +1,7 @@
 import type { ContractHealthIndicator } from "@/types/admin";
 import { formatAddress } from "@/utils/formatters/address";
-import { formatCompactNumber } from "@/utils/formatters/currency";
 import { formatDateTime } from "@/utils/formatters/date";
+import { formatNumber } from "@/utils/formatters/number";
 
 import { SectionCard } from "../ui/SectionCard";
 import { StatusBadge } from "../ui/StatusBadge";
@@ -62,7 +62,7 @@ export function ContractHealthSection({
               <div>
                 <dt className="text-xs text-slate-400">24h Calls</dt>
                 <dd className="text-sm font-semibold text-slate-800">
-                  {formatCompactNumber(contract.invocations24h)}
+                  {formatNumber(contract.invocations24h)}
                 </dd>
               </div>
             </dl>

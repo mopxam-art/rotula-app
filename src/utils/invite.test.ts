@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   buildInviteUrl,
   buildWhatsAppShareUrl,
+  FALLBACK_INVITE_ORIGIN,
   generateInviteCode,
 } from "@/utils/invite";
 
@@ -39,31 +40,26 @@ describe("buildInviteUrl", () => {
     );
   });
 
-  it("falls back to rotula.app when window is unavailable", () => {
+  it("falls back to FALLBACK_INVITE_ORIGIN when window is unavailable", () => {
     vi.stubGlobal("window", undefined);
     expect(buildInviteUrl("servercode")).toBe(
-      "https://rotula.app/invite/servercode",
+      `${FALLBACK_INVITE_ORIGIN}/invite/servercode`,
     );
   });
 });
 
 describe("buildWhatsAppShareUrl", () => {
   it("encodes the message text and url into the wa.me deep link", () => {
-    expect(
-      buildWhatsAppShareUrl(
-        "https://rotula.app/invite/abc123",
-        "Join my group",
-      ),
-    ).toBe(
-      "https://wa.me/?text=Join%20my%20group%20https%3A%2F%2Frotula.app%2Finvite%2Fabc123",
+    const inviteUrl = `${FALLBACK_INVITE_ORIGIN}/invite/abc123`;
+    expect(buildWhatsAppShareUrl(inviteUrl, "Join my group")).toBe(
+      `https://wa.me/?text=${encodeURIComponent(`Join my group ${inviteUrl}`)}`,
     );
   });
 
   it("shares the bare url when no text is provided", () => {
-    expect(buildWhatsAppShareUrl("https://rotula.app/invite/abc123")).toBe(
-      `https://wa.me/?text=${encodeURIComponent(
-        "https://rotula.app/invite/abc123",
-      )}`,
+    const inviteUrl = `${FALLBACK_INVITE_ORIGIN}/invite/abc123`;
+    expect(buildWhatsAppShareUrl(inviteUrl)).toBe(
+      `https://wa.me/?text=${encodeURIComponent(inviteUrl)}`,
     );
   });
 });

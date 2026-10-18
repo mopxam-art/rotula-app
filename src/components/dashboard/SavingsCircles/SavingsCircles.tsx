@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Home, Plane, Plus, ChevronRight } from "lucide-react";
+import { Home, Plane, Plus, ChevronRight, PiggyBank } from "lucide-react";
 import type { SavingsGroup } from "@/hooks/useGroups";
 import { ProgressRing } from "@/components/dashboard/ProgressRing";
 
@@ -60,94 +60,120 @@ export function SavingsCircles({
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {groups.map((group) => {
-          const progress = Math.min((group.saved / group.target) * 100, 100);
-
-          // Helper to get icon based on tag
-          const getIcon = () => {
-            if (group.tag.includes("HOME"))
-              return <Home className="w-5 h-5 text-emerald-700" />;
-            if (group.tag.includes("TRAVEL"))
-              return <Plane className="w-5 h-5 text-emerald-700" />;
-            return <Home className="w-5 h-5 text-emerald-700" />;
-          };
-
-          return (
-            <div
-              key={group.id}
-              className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col items-center gap-4 hover:shadow-md transition-shadow"
-            >
-              <div className="flex justify-between items-center w-full">
-                <div className="w-9 h-9 rounded-full bg-emerald-50 flex items-center justify-center">
-                  {getIcon()}
-                </div>
-                <span className="text-[10px] font-bold tracking-wider text-emerald-700 bg-emerald-100 px-2 py-1 rounded-full uppercase">
-                  {group.tag}
-                </span>
-              </div>
-
-              <ProgressRing progress={progress} className="w-28 h-28">
-                <div className="text-center">
-                  <p className="text-xl font-bold text-gray-900">
-                    {Math.round(progress)}%
-                  </p>
-                  <p className="text-[10px] font-medium text-gray-400">
-                    of goal
-                  </p>
-                </div>
-              </ProgressRing>
-
-              <div className="w-full text-center">
-                <h4 className="text-base font-bold text-gray-900 mb-0.5">
-                  {group.name}
-                </h4>
-                <p className="text-sm text-gray-500">
-                  ${group.saved.toLocaleString()} saved
-                </p>
-              </div>
-
-              <div className="flex justify-between items-center w-full text-xs font-medium text-gray-500">
-                <span>Next: {group.nextDate}</span>
-                <div className="flex -space-x-1.5">
-                  {group.avatars.map((avatar, idx) =>
-                    avatar.startsWith("+") ? (
-                      <div
-                        key={idx}
-                        className="w-6 h-6 rounded-full bg-gray-100 border-2 border-white flex items-center justify-center text-[10px] font-bold text-gray-600 z-10"
-                      >
-                        {avatar}
-                      </div>
-                    ) : (
-                      <img
-                        key={idx}
-                        src={avatar}
-                        alt={`${group.name} member ${idx + 1}`}
-                        width={24}
-                        height={24}
-                        loading="lazy"
-                        decoding="async"
-                        className="w-6 h-6 rounded-full border-2 border-white object-cover z-20"
-                      />
-                    ),
-                  )}
-                </div>
-              </div>
-            </div>
-          );
-        })}
-
-        {/* New Circle Card */}
-        <button className="bg-gray-50/50 rounded-2xl p-5 border-2 border-dashed border-gray-200 flex flex-col items-center justify-center h-full min-h-[200px] hover:bg-gray-50 hover:border-gray-300 transition-colors group">
-          <div className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
-            <Plus className="w-6 h-6 text-emerald-600" />
+      {groups.length === 0 ? (
+        <div
+          role="status"
+          aria-live="polite"
+          className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center min-h-[220px]"
+        >
+          <div className="w-14 h-14 rounded-full bg-emerald-50 flex items-center justify-center mb-4">
+            <PiggyBank
+              className="w-7 h-7 text-emerald-600"
+              aria-hidden="true"
+            />
           </div>
-          <h4 className="text-lg font-bold text-gray-900 mb-1">New Circle</h4>
-          <p className="text-xs text-gray-500 font-medium">
-            Start a community savings plan with friends.
+          <h4 className="text-lg font-bold text-gray-900 mb-1">
+            No savings circles yet
+          </h4>
+          <p className="text-sm text-gray-500 max-w-sm mb-5">
+            You haven&apos;t joined or created any savings circles. Start your
+            first one to begin saving together.
           </p>
-        </button>
-      </div>
+          <button className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-4 py-2 rounded-full transition-colors">
+            <Plus className="w-4 h-4" aria-hidden="true" />
+            Create your first circle
+          </button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {groups.map((group) => {
+            const progress = Math.min((group.saved / group.target) * 100, 100);
+
+            // Helper to get icon based on tag
+            const getIcon = () => {
+              if (group.tag.includes("HOME"))
+                return <Home className="w-5 h-5 text-emerald-700" />;
+              if (group.tag.includes("TRAVEL"))
+                return <Plane className="w-5 h-5 text-emerald-700" />;
+              return <Home className="w-5 h-5 text-emerald-700" />;
+            };
+
+            return (
+              <div
+                key={group.id}
+                className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col items-center gap-4 hover:shadow-md transition-shadow"
+              >
+                <div className="flex justify-between items-center w-full">
+                  <div className="w-9 h-9 rounded-full bg-emerald-50 flex items-center justify-center">
+                    {getIcon()}
+                  </div>
+                  <span className="text-[10px] font-bold tracking-wider text-emerald-700 bg-emerald-100 px-2 py-1 rounded-full uppercase">
+                    {group.tag}
+                  </span>
+                </div>
+
+                <ProgressRing progress={progress} className="w-28 h-28">
+                  <div className="text-center">
+                    <p className="text-xl font-bold text-gray-900">
+                      {Math.round(progress)}%
+                    </p>
+                    <p className="text-[10px] font-medium text-gray-400">
+                      of goal
+                    </p>
+                  </div>
+                </ProgressRing>
+
+                <div className="w-full text-center">
+                  <h4 className="text-base font-bold text-gray-900 mb-0.5">
+                    {group.name}
+                  </h4>
+                  <p className="text-sm text-gray-500">
+                    ${group.saved.toLocaleString()} saved
+                  </p>
+                </div>
+
+                <div className="flex justify-between items-center w-full text-xs font-medium text-gray-500">
+                  <span>Next: {group.nextDate}</span>
+                  <div className="flex -space-x-1.5">
+                    {group.avatars.map((avatar, idx) =>
+                      avatar.startsWith("+") ? (
+                        <div
+                          key={idx}
+                          className="w-6 h-6 rounded-full bg-gray-100 border-2 border-white flex items-center justify-center text-[10px] font-bold text-gray-600 z-10"
+                        >
+                          {avatar}
+                        </div>
+                      ) : (
+                        <img
+                          key={idx}
+                          src={avatar}
+                          alt={`${group.name} member ${idx + 1}`}
+                          width={24}
+                          height={24}
+                          loading="lazy"
+                          decoding="async"
+                          className="w-6 h-6 rounded-full border-2 border-white object-cover z-20"
+                        />
+                      ),
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+
+          {/* New Circle Card */}
+          <button className="bg-gray-50/50 rounded-2xl p-5 border-2 border-dashed border-gray-200 flex flex-col items-center justify-center h-full min-h-[200px] hover:bg-gray-50 hover:border-gray-300 transition-colors group">
+            <div className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
+              <Plus className="w-6 h-6 text-emerald-600" />
+            </div>
+            <h4 className="text-lg font-bold text-gray-900 mb-1">New Circle</h4>
+            <p className="text-xs text-gray-500 font-medium">
+              Start a community savings plan with friends.
+            </p>
+          </button>
+        </div>
+      )}
     </div>
   );
 }
