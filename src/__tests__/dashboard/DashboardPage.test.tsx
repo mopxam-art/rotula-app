@@ -90,29 +90,29 @@ describe("Dashboard Page", () => {
     expect(screen.getByText("Mock Tx")).toBeInTheDocument();
   });
 
-  it("renders error boundaries", () => {
+  it("renders accessible error panels with announced alert role when data loading fails", () => {
     vi.mocked(useWallet).mockReturnValue({
-      error: new Error("Error"),
+      error: new Error("Custom wallet failure"),
       isLoading: false,
       data: null,
     });
     vi.mocked(useGroups).mockReturnValue({
-      error: new Error("Error"),
+      error: new Error("Custom groups failure"),
       isLoading: false,
       data: null,
     });
     vi.mocked(usePayments).mockReturnValue({
-      error: new Error("Error"),
+      error: new Error("Custom payments failure"),
       isLoading: false,
       data: null,
     });
 
     render(<Dashboard />);
 
-    expect(screen.getByText("Error loading wallet data")).toBeInTheDocument();
-    expect(
-      screen.getByText("Error loading savings groups"),
-    ).toBeInTheDocument();
-    expect(screen.getByText("Error loading transactions")).toBeInTheDocument();
+    const alerts = screen.getAllByRole("alert");
+    expect(alerts).toHaveLength(3);
+    expect(screen.getByText("Custom wallet failure")).toBeInTheDocument();
+    expect(screen.getByText("Custom groups failure")).toBeInTheDocument();
+    expect(screen.getByText("Custom payments failure")).toBeInTheDocument();
   });
 });

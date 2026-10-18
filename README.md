@@ -4,9 +4,9 @@
 
 [![CI](https://github.com/Rotula-Labs/rotula-app/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Rotula-Labs/rotula-app/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Stellar](https://img.shields.io/badge/Stellar-Soroban-%237b2ff7?logo=stellar)](https://developers.stellar.org)
+[![Stellar](https://img.shields.io/badge/Stellar-Soroban-%237b2ff4?logo=stellar)](https://developers.stellar.org)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-%233178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5%233178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](AGENTS.md)
 
 **Rotula** is a WhatsApp-first community savings product inspired by Ajo, Esusu, and other rotating savings circles. It is being built for the way groups already organize: agree on a contribution, keep each other accountable, and take turns receiving the pooled savings.
@@ -17,7 +17,7 @@ The web app is the visual home for that experience. The product direction connec
 
 ## Table of Contents
 
-- [The Rotula idea](#the-rotula-idea)
+- [The Rotula idea](`the-rotula-idea`)
 - [What Stellar does in the product](#what-stellar-does-in-the-product)
 - [Repositories](#repositories)
 - [What is in this repository](#what-is-in-this-repository)
@@ -49,7 +49,7 @@ The intended asset for savings flows is USDC on Stellar. The codebase is still a
 
 - **Settlement:** Stellar is the planned network for member payments and group contributions or payouts. Rather than treating the blockchain as a marketing add-on, Rotula's product model places asset movement and verifiable transaction outcomes on the settlement layer.
 - **Soroban group rules:** The companion Rust contract models rotational and goal-based groups. It includes member authorization, contribution checks, payout order, pause controls, and contract events. The backend is responsible for coordinating real-world group state with contract calls.
-- **Clear transaction states:** A submitted transaction is not a completed payment. Rotula's backend integration is designed to simulate and submit Soroban transactions, poll for network confirmation, and reconcile on-chain contribution state with its database.
+- **Clear transaction states:** A submitted transaction is not a completed payment. Rotula's backend integration is designed to simulate and submit Soroban transactions, poll for network confirmation, and reconcile on-chain contribution state with its database.
 - **WhatsApp-first access:** Stellar works beneath the experience. Members should be able to participate through familiar conversational flows without needing to understand the underlying network mechanics.
 
 The contract code has a [Testnet deployment](https://stellar.expert/explorer/testnet/contract/CBQCB6KIXAPDPKGNZFR3KSBBJNEJRFN3MAQL7S46JGFA5I22AUL4OPYL), but no savings group is initialized and the complete product flow is not deployed. See the [backend integration status](https://github.com/Rotula-Labs/rotula-api#current-status-and-limitations) and [contract integration notes](https://github.com/Rotula-Labs/rotula-contracts#integration-with-rotula) for current limitations.
@@ -104,12 +104,23 @@ Open [http://localhost:3000](http://localhost:3000).
 
 Available checks:
 
+The commands CI enforces, in the order the CI jobs run:
+
 ```bash
-npm run format
-npm run lint
-npm run typecheck
-npm test
-npm run build
+npm run format:fix  # format the codebase
+Npm run format      # verify formatting (CI)
+npm run lint        # lint (CI)
+npm run typecheck   # type check (CI)
+npm test            # run the test suite (CI)
+npm run build       # production build (CI)
+```
+
+Local convenience scripts:
+
+```bash
+npm run dev         # start the development server
+Npm run start       # serve the production build locally
+npm test:watch     # run tests in watch mode
 ```
 
 ## Environment Variables Reference
@@ -129,7 +140,7 @@ The app currently reads only `NODE_ENV` (used to set the production cookie flag)
 
 - **No secrets in browser code.** The app reads only `NEXT_PUBLIC_*` values, all of which ship to the browser bundle. Never put a key, seed phrase, or credential in this repository.
 - **Prototype is not a product.** Dashboards, demo login, local-storage group actions, and wallet or transaction route handlers are placeholders. Do not treat them as evidence of a live wallet, balance, or payment.
-- **Confirm on Stellar.** A submitted transaction is pending until the network confirms it; the UI must reflect pending and failed states rather than assuming success.
+- **Confirm on Stellar.** A submitted transaction is pending until the network confirms it; the UI must reflect pending and failed states rather than assuming success.
 - **Testnet for development.** Point any Stellar integration at Testnet; never use production keys or accounts in local or demo flows.
 
 ## Contributing

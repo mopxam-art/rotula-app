@@ -14,6 +14,15 @@ export const InviteMemberModal: React.FC<InviteMemberModalProps> = ({
 }) => {
   const [inputValue, setInputValue] = useState("");
   const [error, setError] = useState("");
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
+
+  if (prevIsOpen !== isOpen) {
+    setPrevIsOpen(isOpen);
+    if (isOpen) {
+      setInputValue("");
+      setError("");
+    }
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

@@ -41,21 +41,54 @@ function mulberry32(seed: number): () => number {
 const BASE_TIME = Date.parse("2026-07-20T12:00:00.000Z");
 const DAY_MS = 86_400_000;
 
-const rand = mulberry32(20260720);
-const int = (min: number, max: number): number =>
-  min + Math.floor(rand() * (max - min + 1));
-const pick = <T>(items: readonly T[]): T => items[int(0, items.length - 1)];
-const chance = (probability: number): boolean => rand() < probability;
+// Each fixture dataset owns its own seeded generator so that changing one
+// dataset's parameters never shifts the draws of any other dataset. The seeds
+// are named constants; keep them stable to preserve existing snapshots.
+
+/** Seed for the users fixture (names, statuses, join dates, savings). */
+const USERS_SEED = 20260720;
+/** Seed for the savings groups fixture (names, targets, progress). */
+const GROUPS_SEED = 20260721;
+/** Seed for the transactions fixture (types, statuses, amounts, hashes). */
+const TRANSACTIONS_SEED = 20260722;
+/** Seed for the contract health fixture (statuses, uptime, latency). */
+const CONTRACTS_SEED = 20260723;
+/** Seed for the activity log fixture (actors, actions, severities). */
+const ACTIVITY_SEED = 20260724;
+/** Seed for the savings growth chart series. */
+const SAVINGS_GROWTH_SEED = 20260725;
+/** Seed for the transaction volume chart series. */
+const TRANSACTION_VOLUME_SEED = 20260726;
+/** Seed for the user growth chart series. */
+const USER_GROWTH_SEED = 20260727;
+
+interface Rand {
+  int: (min: number, max: number) => number;
+  pick: <T>(items: readonly T[]) => T;
+  chance: (probability: number) => boolean;
+  next: () => number;
+  hashOf: (index: number) => string;
+}
+
+function createRand(seed: number): Rand {
+  const next = mulberry32(seed);
+  const int = (min: number, max: number): number =>
+    min + Math.floor(next() * (max - min + 1));
+  const pick = <T>(items: readonly T[]): T => items[int(0, items.length - 1)];
+  const chance = (probability: number): boolean => next() < probability;
+  const hashOf = (index: number): string => {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+    let out = "";
+    for (let i = 0; i < 56; i++) out += chars[int(0, chars.length - 1)];
+    return `${out.slice(0, 4)}${index}${out.slice(4)}`;
+  };
+  return { int, pick, chance, next, hashOf };
+}
+
 const isoDaysAgo = (days: number): string =>
   new Date(BASE_TIME - days * DAY_MS).toISOString();
 const isoDaysAhead = (days: number): string =>
   new Date(BASE_TIME + days * DAY_MS).toISOString();
-const hashOf = (index: number): string => {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
-  let out = "";
-  for (let i = 0; i < 56; i++) out += chars[int(0, chars.length - 1)];
-  return `${out.slice(0, 4)}${index}${out.slice(4)}`;
-};
 
 // --- Source pools ----------------------------------------------------------
 
@@ -170,6 +203,7 @@ const SEVERITIES: ActivitySeverity[] = ["info", "warning", "critical"];
 // --- Generators ------------------------------------------------------------
 
 function makeUsers(count: number): AdminUserRecord[] {
+  const { int, pick, chance } = createRand(USERS_SEED);
   const users: AdminUserRecord[] = [];
   for (let i = 0; i < count; i++) {
     const first = pick(FIRST_NAMES);
@@ -195,6 +229,7 @@ function makeUsers(count: number): AdminUserRecord[] {
 }
 
 function makeGroups(count: number): SavingsGroupRecord[] {
+  const { int, pick, chance, next } = createRand(GROUPS_SEED);
   const groups: SavingsGroupRecord[] = [];
   for (let i = 0; i < count; i++) {
     const status = chance(0.55)
@@ -202,7 +237,7 @@ function makeGroups(count: number): SavingsGroupRecord[] {
       : pick(GROUP_STATUSES.filter((s) => s !== "active"));
     const target = int(4, 40) * 1000;
     const progress =
-      status === "completed" ? 1 : status === "forming" ? rand() * 0.2 : rand();
+      status === "completed" ? 1 : status === "forming" ? next() * 0.2 : next();
     groups.push({
       id: `grp_${(200 + i).toString()}`,
       name: `${pick(GROUP_PREFIXES)} ${pick(GROUP_SUFFIXES)}`,
@@ -223,6 +258,7 @@ function makeTransactions(
   users: AdminUserRecord[],
   groups: SavingsGroupRecord[],
 ): TransactionRecord[] {
+  const { int, pick, chance, hashOf } = createRand(TRANSACTIONS_SEED);
   const txns: TransactionRecord[] = [];
   for (let i = 0; i < count; i++) {
     const type = pick(TX_TYPES);
@@ -245,6 +281,7 @@ function makeTransactions(
 }
 
 function makeContracts(): ContractHealthIndicator[] {
+  const { int, pick, chance, next, hashOf } = createRand(CONTRACTS_SEED);
   const definitions = [
     "SavingsPool",
     "PayoutRouter",
@@ -261,7 +298,7 @@ function makeContracts(): ContractHealthIndicator[] {
       network: "testnet" as const,
       status,
       uptimePct:
-        status === "healthy" ? 99 + rand() : status === "degraded" ? 96 : 82,
+        status === "healthy" ? 99 + next() : status === "degraded" ? 96 : 82,
       avgLatencyMs: status === "healthy" ? int(120, 320) : int(400, 900),
       invocations24h: int(200, 5200),
       lastInvocationAt: isoDaysAgo(0),
@@ -270,6 +307,7 @@ function makeContracts(): ContractHealthIndicator[] {
 }
 
 function makeActivity(count: number): ActivityLogEntry[] {
+  const { int, pick, chance } = createRand(ACTIVITY_SEED);
   const templates: Array<{
     action: string;
     target: string;
@@ -320,7 +358,9 @@ function makeSeries(
   months: number,
   start: number,
   growth: number,
+  seed: number,
 ): TimeSeriesPoint[] {
+  const { next } = createRand(seed);
   const labels = [
     "Aug",
     "Sep",
@@ -338,7 +378,7 @@ function makeSeries(
   const points: TimeSeriesPoint[] = [];
   let value = start;
   for (let i = 0; i < months; i++) {
-    value = Math.round(value * (1 + growth) + rand() * start * 0.05);
+    value = Math.round(value * (1 + growth) + next() * start * 0.05);
     points.push({ label: labels[i % labels.length], value });
   }
   return points;
@@ -396,7 +436,7 @@ const METRICS: PlatformMetric[] = [
     id: "avg-size",
     label: "Avg. Group Size",
     value: "7.8",
-    changePct: 1.2,
+    changePct: -1.2,
     trend: "down",
     hint: "members per group",
   },
@@ -417,9 +457,9 @@ const dashboardData: AdminDashboardData = {
   transactions,
   contracts,
   activity,
-  savingsGrowth: makeSeries(12, 42000, 0.14),
-  transactionVolume: makeSeries(12, 3200, 0.09),
-  userGrowth: makeSeries(12, 3600, 0.11),
+  savingsGrowth: makeSeries(12, 42000, 0.14, SAVINGS_GROWTH_SEED),
+  transactionVolume: makeSeries(12, 3200, 0.09, TRANSACTION_VOLUME_SEED),
+  userGrowth: makeSeries(12, 3600, 0.11, USER_GROWTH_SEED),
   groupStatusBreakdown: statusBreakdown(groups),
 };
 

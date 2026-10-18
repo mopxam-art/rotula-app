@@ -20,7 +20,7 @@ export const GroupHeader: React.FC<GroupHeaderProps> = ({
             <div className="w-8 h-8 rounded-full bg-gray-300 border-2 border-white overflow-hidden">
               <img
                 src="https://i.pravatar.cc/150?u=1"
-                alt={`${title} member 1`}
+                alt=""
                 width={32}
                 height={32}
                 loading="lazy"
@@ -30,7 +30,7 @@ export const GroupHeader: React.FC<GroupHeaderProps> = ({
             <div className="w-8 h-8 rounded-full bg-gray-300 border-2 border-white overflow-hidden">
               <img
                 src="https://i.pravatar.cc/150?u=2"
-                alt={`${title} member 2`}
+                alt=""
                 width={32}
                 height={32}
                 loading="lazy"
@@ -40,7 +40,7 @@ export const GroupHeader: React.FC<GroupHeaderProps> = ({
             <div className="w-8 h-8 rounded-full bg-gray-300 border-2 border-white overflow-hidden">
               <img
                 src="https://i.pravatar.cc/150?u=3"
-                alt={`${title} member 3`}
+                alt=""
                 width={32}
                 height={32}
                 loading="lazy"

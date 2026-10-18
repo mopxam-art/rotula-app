@@ -38,6 +38,8 @@ export function generateInviteCode(length = 9): string {
   return code;
 }
 
+export const FALLBACK_INVITE_ORIGIN = "https://kolo.app";
+
 /**
  * Build the absolute invite URL for a code, e.g. "https://kolo.app/invite/abc123xyz".
  *
@@ -48,7 +50,7 @@ export function buildInviteUrl(code: string, origin?: string): string {
     origin ??
     (typeof window !== "undefined"
       ? window.location.origin
-      : "https://kolo.app");
+      : FALLBACK_INVITE_ORIGIN);
   return `${base}/invite/${code}`;
 }
 

@@ -19,7 +19,7 @@ export const Sidebar = () => {
 
   const navItems = [
     { name: "Home", icon: Home, href: "/dashboard" },
-    { name: "Savings", icon: PiggyBank, href: "/savings" },
+    { name: "Savings", icon: PiggyBank, href: "/groups" },
     { name: "Groups", icon: Users, href: "/groups" },
     { name: "Payments", icon: CreditCard, href: "/payments" },
     { name: "Settings", icon: Settings, href: "/profile" },
@@ -66,7 +66,7 @@ export const Sidebar = () => {
         </div>
         <div className="mt-auto p-6">
           <Link
-            href="/groups/new"
+            href="/groups"
             className="block text-center w-full bg-[#047857] hover:bg-[#065f46] text-white py-3 rounded-xl font-medium transition-colors"
           >
             Start New Goal
@@ -77,7 +77,7 @@ export const Sidebar = () => {
       {/* Mobile overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+          className="fixed inset-0 bg-black/50 z-30 md:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}
