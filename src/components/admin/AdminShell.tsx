@@ -13,22 +13,8 @@ import { OverviewSection } from "./sections/OverviewSection";
 import { TransactionsSection } from "./sections/TransactionsSection";
 import { UsersSection } from "./sections/UsersSection";
 
-type TabId =
-  | "overview"
-  | "users"
-  | "groups"
-  | "transactions"
-  | "contracts"
-  | "activity";
-
-const TABS: { id: TabId; label: string }[] = [
-  { id: "overview", label: "Overview" },
-  { id: "users", label: "Users" },
-  { id: "groups", label: "Groups" },
-  { id: "transactions", label: "Transactions" },
-  { id: "contracts", label: "Contracts" },
-  { id: "activity", label: "Activity" },
-];
+import { AdminNav, TABS, type TabId } from "./AdminNav";
+export { AdminNav, TABS, type TabId };
 
 interface AdminShellProps {
   user: AuthUser;
@@ -59,23 +45,11 @@ export function AdminShell({ user, data }: AdminShellProps) {
             Kolo
           </span>
         </div>
-        <nav className="flex flex-col gap-1">
-          {TABS.map((tab) => (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => setActiveTab(tab.id)}
-              aria-current={activeTab === tab.id ? "page" : undefined}
-              className={`rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors ${
-                activeTab === tab.id
-                  ? "bg-[#006c49]/10 text-[#006c49]"
-                  : "text-slate-600 hover:bg-slate-50"
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </nav>
+        <AdminNav
+          activeTab={activeTab}
+          onSelectTab={setActiveTab}
+          layout="sidebar"
+        />
       </aside>
 
       {/* Main column */}
@@ -110,23 +84,11 @@ export function AdminShell({ user, data }: AdminShellProps) {
         </header>
 
         {/* Mobile tab bar */}
-        <nav className="flex gap-1 overflow-x-auto border-b border-slate-200 bg-white px-3 py-2 md:hidden">
-          {TABS.map((tab) => (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => setActiveTab(tab.id)}
-              aria-current={activeTab === tab.id ? "page" : undefined}
-              className={`whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-                activeTab === tab.id
-                  ? "bg-[#006c49]/10 text-[#006c49]"
-                  : "text-slate-600 hover:bg-slate-50"
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </nav>
+        <AdminNav
+          activeTab={activeTab}
+          onSelectTab={setActiveTab}
+          layout="mobile"
+        />
 
         {/* Content */}
         <main className="flex-1 overflow-x-hidden p-5">

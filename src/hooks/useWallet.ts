@@ -1,11 +1,8 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "./useAuth";
+import { useAuth } from "@/hooks/useAuth";
+import { walletService, type WalletData } from "@/services/api/wallet";
 
-export interface WalletData {
-  balance: number;
-  currency: string;
-  trendPercentage: number;
-}
+export type { WalletData };
 
 export const useWallet = () => {
   const [data, setData] = useState<WalletData | null>(null);
@@ -20,27 +17,33 @@ export const useWallet = () => {
       return () => clearTimeout(timer);
     }
 
+    let mounted = true;
     const fetchWallet = async () => {
       try {
         setIsLoading(true);
-        // Simulate API call scoped to user
-        await new Promise((resolve) => setTimeout(resolve, 800));
-
-        // Mocked response for user ${user.id}
-        setData({
-          balance: 12450.0,
-          currency: "USDC",
-          trendPercentage: 2.4,
-        });
+        const wallet = await walletService.getWallet();
+        if (mounted) {
+          setData(wallet);
+          setError(null);
+        }
       } catch (err) {
-        setError(
-          err instanceof Error ? err : new Error("Failed to fetch wallet data"),
-        );
+        if (mounted) {
+          setError(
+            err instanceof Error
+              ? err
+              : new Error("Failed to fetch wallet data"),
+          );
+        }
       } finally {
-        setIsLoading(false);
+        if (mounted) {
+          setIsLoading(false);
+        }
       }
     };
     fetchWallet();
+    return () => {
+      mounted = false;
+    };
   }, [user]);
 
   return { data, isLoading, error };

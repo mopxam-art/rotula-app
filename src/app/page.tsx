@@ -3,7 +3,7 @@ import Hero from "@/components/landing/Hero";
 import Features from "@/components/landing/Features";
 import HowItWorks from "@/components/landing/HowItWorks";
 import StellarSection from "@/components/landing/StellarSection";
-import Testimonials from "@/components/landing/Testimonials";
+import Traditions from "@/components/landing/Traditions";
 import FAQ from "@/components/landing/FAQ";
 import CTASection from "@/components/landing/CTASection";
 import Footer from "@/components/landing/Footer";
@@ -16,7 +16,7 @@ export default function Home() {
       <Features />
       <HowItWorks />
       <StellarSection />
-      <Testimonials />
+      <Traditions />
       <FAQ />
       <CTASection />
       <Footer />

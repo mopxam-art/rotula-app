@@ -12,7 +12,7 @@ import {
 
 import type { TimeSeriesPoint } from "@/types/admin";
 import {
-  formatCompactNumber,
+  formatCompactCurrency,
   formatCurrency,
 } from "@/utils/formatters/currency";
 
@@ -42,8 +42,8 @@ export function SavingsGrowthChart({ data }: { data: TimeSeriesPoint[] }) {
           tick={{ fontSize: 12, fill: "#94a3b8" }}
           axisLine={false}
           tickLine={false}
-          width={52}
-          tickFormatter={(value: number) => formatCompactNumber(value)}
+          width={56}
+          tickFormatter={(value: number) => formatCompactCurrency(value)}
         />
         <Tooltip
           formatter={(value) => [formatCurrency(Number(value ?? 0)), "Saved"]}
