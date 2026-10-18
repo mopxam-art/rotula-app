@@ -41,7 +41,7 @@ export default function FAQ() {
   return (
     <section
       id="faq"
-      className="bg-[#f6f8fc] px-4 py-20 sm:px-6 sm:py-28 lg:px-8"
+      className="scroll-mt-24 bg-[#f6f8fc] px-4 py-20 sm:px-6 sm:py-28 lg:px-8"
     >
       <div className="mx-auto max-w-3xl">
         <div className="mb-10 text-center">

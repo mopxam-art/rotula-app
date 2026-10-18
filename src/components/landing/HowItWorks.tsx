@@ -26,7 +26,7 @@ export default function HowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="bg-[#f6f8fc] px-4 py-20 sm:px-6 sm:py-28 lg:px-8"
+      className="scroll-mt-24 bg-[#f6f8fc] px-4 py-20 sm:px-6 sm:py-28 lg:px-8"
     >
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto max-w-2xl text-center">

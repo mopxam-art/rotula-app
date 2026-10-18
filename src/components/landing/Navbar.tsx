@@ -3,11 +3,20 @@
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 
-const links = [
+export interface NavLink {
+  href: string;
+  label: string;
+}
+
+export const NAV_LINKS: NavLink[] = [
+  { href: "#features", label: "Features" },
   { href: "#how-it-works", label: "How it works" },
   { href: "#stellar", label: "Why Stellar" },
+  { href: "#community", label: "Community" },
   { href: "#faq", label: "FAQ" },
 ];
+
+export const links = NAV_LINKS;
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -68,7 +77,7 @@ export default function Navbar() {
         </Link>
 
         <div className="hidden items-center gap-8 md:flex">
-          {links.map(({ href, label }) => (
+          {NAV_LINKS.map(({ href, label }) => (
             <a
               key={href}
               href={href}
@@ -115,7 +124,7 @@ export default function Navbar() {
 
       {open && (
         <div className="mx-auto mt-2 max-w-7xl rounded-2xl border border-slate-200 bg-white p-3 shadow-lg md:hidden">
-          {links.map(({ href, label }) => (
+          {NAV_LINKS.map(({ href, label }) => (
             <a
               key={href}
               href={href}

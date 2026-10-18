@@ -29,7 +29,7 @@ export default function StellarSection() {
   return (
     <section
       id="stellar"
-      className="relative overflow-hidden bg-[#101a2c] px-4 py-20 text-white sm:px-6 sm:py-28 lg:px-8"
+      className="scroll-mt-24 relative overflow-hidden bg-[#101a2c] px-4 py-20 text-white sm:px-6 sm:py-28 lg:px-8"
     >
       <div
         className="pointer-events-none absolute -left-32 top-0 h-96 w-96 rounded-full bg-[#4775d1]/20 blur-3xl"
