@@ -2,6 +2,7 @@ import type { ActivityLogEntry } from "@/types/admin";
 import { formatDateTime } from "@/utils/formatters/date";
 
 import { SectionCard } from "../ui/SectionCard";
+import { StatusBadge } from "../ui/StatusBadge";
 
 const SEVERITY_DOT: Record<ActivityLogEntry["severity"], string> = {
   info: "bg-sky-500",
@@ -32,19 +33,22 @@ export function ActivitySection({
           {activity.map((entry) => (
             <li key={entry.id} className="relative">
               <span
-                className={`absolute -left-[27px] top-1 h-3 w-3 rounded-full ring-4 ring-white ${SEVERITY_DOT[entry.severity]}`}
-                aria-hidden
+                className={`absolute -left-[27px] top-1.5 h-3 w-3 rounded-full ring-4 ring-white ${SEVERITY_DOT[entry.severity]}`}
+                aria-hidden="true"
               />
-              <div className="flex flex-wrap items-baseline justify-between gap-x-3">
-                <p className="text-sm text-slate-700">
-                  <span className="font-medium text-slate-900">
-                    {entry.actor}
-                  </span>{" "}
-                  {entry.action}{" "}
-                  <span className="font-mono text-xs text-slate-500">
-                    {entry.target}
-                  </span>
-                </p>
+              <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <StatusBadge status={entry.severity} />
+                  <p className="text-sm text-slate-700">
+                    <span className="font-medium text-slate-900">
+                      {entry.actor}
+                    </span>{" "}
+                    {entry.action}{" "}
+                    <span className="font-mono text-xs text-slate-500">
+                      {entry.target}
+                    </span>
+                  </p>
+                </div>
                 <time className="text-xs text-slate-400">
                   {formatDateTime(entry.createdAt)}
                 </time>

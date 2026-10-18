@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AuthProvider } from "@/context/AuthContext";
 import { useAuth } from "@/hooks/useAuth";
 
-const STORAGE_KEY = "rotula_auth";
+const STORAGE_KEY = "kolo_auth";
 
 function AuthProbe() {
   const { isAuthenticated, isLoading, user, login, logout } = useAuth();
@@ -42,7 +42,7 @@ describe("AuthProvider", () => {
     expect(html).toContain('data-testid="authenticated">false<');
   });
 
-  it("hydrates an existing session from the rotula_auth key", () => {
+  it("hydrates an existing session from the kolo_auth key", () => {
     window.localStorage.setItem(
       STORAGE_KEY,
       JSON.stringify({ id: "u9", name: "Grace", email: "g@rotula.app" }),

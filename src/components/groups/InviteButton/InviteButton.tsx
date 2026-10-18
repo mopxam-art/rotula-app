@@ -1,9 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import type { Group } from "@/types/group";
 import { groupsService } from "@/services/api/groups";
 import { buildInviteUrl, buildWhatsAppShareUrl } from "@/utils/invite";
+
+const emptySubscribe = () => () => {};
+
+function getCanNativeShareSnapshot(): boolean {
+  return typeof navigator !== "undefined" && Boolean(navigator.share);
+}
+
+function getServerSnapshot(): boolean {
+  return false;
+}
+
+/**
+ * Subscribes to client-side native share capability without reading browser APIs during render.
+ * Avoids hydration mismatches between SSR and initial client hydration.
+ */
+export function useCanNativeShare(): boolean {
+  return useSyncExternalStore(
+    emptySubscribe,
+    getCanNativeShareSnapshot,
+    getServerSnapshot,
+  );
+}
 
 interface InviteButtonProps {
   group: Group;
@@ -22,6 +44,7 @@ export function InviteButton({ group }: InviteButtonProps) {
   const [status, setStatus] = useState<Status>("idle");
   const [url, setUrl] = useState("");
   const [copied, setCopied] = useState(false);
+  const canNativeShare = useCanNativeShare();
 
   const shareText = `Join my Kolo savings group "${group.name}" 💰`;
 
@@ -57,9 +80,6 @@ export function InviteButton({ group }: InviteButtonProps) {
       /* clipboard blocked — the link is still visible for manual copy */
     }
   }
-
-  const canNativeShare =
-    typeof navigator !== "undefined" && Boolean(navigator.share);
 
   return (
     <div className="w-full">
