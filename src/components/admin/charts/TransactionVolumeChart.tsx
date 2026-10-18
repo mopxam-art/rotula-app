@@ -12,9 +12,14 @@ import {
 
 import type { TimeSeriesPoint } from "@/types/admin";
 import { formatCompactNumber } from "@/utils/formatters/currency";
+import { ChartEmptyState } from "./ChartEmptyState";
 
 /** Bar chart of monthly on-chain transaction counts. */
 export function TransactionVolumeChart({ data }: { data: TimeSeriesPoint[] }) {
+  if (!data || data.length === 0) {
+    return <ChartEmptyState />;
+  }
+
   return (
     <ResponsiveContainer width="100%" height={260}>
       <BarChart data={data} margin={{ top: 8, right: 8, left: -8, bottom: 0 }}>

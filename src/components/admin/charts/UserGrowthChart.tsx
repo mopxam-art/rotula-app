@@ -12,9 +12,14 @@ import {
 
 import type { TimeSeriesPoint } from "@/types/admin";
 import { formatCompactNumber } from "@/utils/formatters/currency";
+import { ChartEmptyState } from "./ChartEmptyState";
 
 /** Line chart of new users onboarded per month. */
 export function UserGrowthChart({ data }: { data: TimeSeriesPoint[] }) {
+  if (!data || data.length === 0) {
+    return <ChartEmptyState />;
+  }
+
   return (
     <ResponsiveContainer width="100%" height={260}>
       <LineChart data={data} margin={{ top: 8, right: 8, left: -8, bottom: 0 }}>

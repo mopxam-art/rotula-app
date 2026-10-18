@@ -15,9 +15,14 @@ import {
   formatCompactNumber,
   formatCurrency,
 } from "@/utils/formatters/currency";
+import { ChartEmptyState } from "./ChartEmptyState";
 
 /** Area chart of cumulative platform savings over time (USD). */
 export function SavingsGrowthChart({ data }: { data: TimeSeriesPoint[] }) {
+  if (!data || data.length === 0) {
+    return <ChartEmptyState />;
+  }
+
   return (
     <ResponsiveContainer width="100%" height={260}>
       <AreaChart data={data} margin={{ top: 8, right: 8, left: -8, bottom: 0 }}>
