@@ -152,6 +152,7 @@ export default function GroupDetails() {
         isOpen={isInviteModalOpen}
         onClose={() => setIsInviteModalOpen(false)}
         onInvite={handleInvite}
+        headingLevel="h2"
       />
     </div>
   );
